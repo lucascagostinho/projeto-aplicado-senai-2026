@@ -1,0 +1,80 @@
+<div class="page-wrapper">
+  <p-toast />
+  <p-confirmDialog />
+
+  <p-toolbar styleClass="toolbar-custom">
+    <ng-template #start>
+      <h2 class="page-title">Animais para Adoção</h2>
+    </ng-template>
+    <ng-template #end>
+      <p-button label="Novo Animal" icon="pi pi-plus" (onClick)="novo()" />
+    </ng-template>
+  </p-toolbar>
+
+  <div class="table-wrapper">
+    <p-table
+      [value]="animais()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 25]"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      stripedRows
+      showGridlines
+      emptyMessage="Nenhum animal cadastrado.">
+
+      <ng-template #header>
+        <tr>
+          <th>ID</th>
+          <th>Espécie</th>
+          <th>Raça</th>
+          <th>Sexo</th>
+          <th>Faixa Etária</th>
+          <th>Porte</th>
+          <th>Cidade / UF</th>
+          <th>Castrado</th>
+          <th>Vacinado</th>
+          <th>Status</th>
+          <th style="width: 130px">Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-animal>
+        <tr>
+          <td>{{ animal.id }}</td>
+          <td>{{ animal.especie }}</td>
+          <td>{{ animal.raca || '—' }}</td>
+          <td>{{ animal.sexo }}</td>
+          <td>{{ animal.faixaEtaria }}</td>
+          <td>{{ animal.porte }}</td>
+          <td>{{ animal.cidade }} / {{ animal.estado }}</td>
+          <td>
+            <i class="pi" [class.pi-check-circle]="animal.castrado" [class.pi-times-circle]="!animal.castrado"
+               [style.color]="animal.castrado ? '#22c55e' : '#ef4444'"></i>
+          </td>
+          <td>
+            <i class="pi" [class.pi-check-circle]="animal.vacinado" [class.pi-times-circle]="!animal.vacinado"
+               [style.color]="animal.vacinado ? '#22c55e' : '#ef4444'"></i>
+          </td>
+          <td>
+            <p-tag [value]="labelStatus(animal.status)" [severity]="severityStatus(animal.status)" />
+          </td>
+          <td>
+            <div class="acoes">
+              <p-button icon="pi pi-pencil" size="small" severity="info" (onClick)="editar(animal)" pTooltip="Editar" />
+              <p-button icon="pi pi-trash" size="small" severity="danger" (onClick)="confirmarExclusao(animal)" pTooltip="Excluir" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+</div>
+
+<style>
+  .page-wrapper { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+  .page-title { font-size: 1.3rem; font-weight: 600; color: #1e293b; margin: 0; }
+  .toolbar-custom { margin-bottom: 1rem; border-radius: 8px; }
+  .table-wrapper { border-radius: 8px; overflow: hidden; }
+  .acoes { display: flex; gap: 0.25rem; justify-content: center; }
+</style>

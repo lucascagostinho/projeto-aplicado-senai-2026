@@ -1,0 +1,7 @@
+br\senai\apoiopet\animal\AnimalDTO.class
+br\senai\apoiopet\animal\AnimalService.class
+br\senai\apoiopet\animal\Animal.class
+br\senai\apoiopet\config\CorsConfig.class
+br\senai\apoiopet\ApoioPetApplication.class
+br\senai\apoiopet\animal\AnimalController.class
+br\senai\apoiopet\animal\AnimalRepository.class

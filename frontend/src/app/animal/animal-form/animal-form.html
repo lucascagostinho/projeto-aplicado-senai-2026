@@ -1,0 +1,138 @@
+<div class="page-wrapper">
+  <p-toast />
+
+  <p-card>
+    <ng-template #title>
+      <div class="card-header">
+        <i class="pi pi-heart-fill" style="color: #ef4444; margin-right: 0.5rem;"></i>
+        {{ editando ? 'Editar Animal' : 'Cadastrar Animal' }}
+      </div>
+    </ng-template>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+
+      <p-divider align="left"><span class="section-label">Identificação</span></p-divider>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>Espécie *</label>
+          <p-select formControlName="especie" [options]="especies" optionLabel="label"
+            placeholder="Selecione" [style]="{ width: '100%' }"
+            [invalid]="temErro('especie')" />
+          <small *ngIf="temErro('especie')" class="erro">Espécie é obrigatória</small>
+        </div>
+
+        <div class="form-field">
+          <label>Raça</label>
+          <input pInputText formControlName="raca" placeholder="Ex: Labrador" style="width: 100%" />
+        </div>
+
+        <div class="form-field">
+          <label>Sexo *</label>
+          <p-select formControlName="sexo" [options]="sexos" optionLabel="label"
+            placeholder="Selecione" [style]="{ width: '100%' }"
+            [invalid]="temErro('sexo')" />
+          <small *ngIf="temErro('sexo')" class="erro">Sexo é obrigatório</small>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>Faixa Etária *</label>
+          <p-select formControlName="faixaEtaria" [options]="faixasEtarias" optionLabel="label"
+            placeholder="Selecione" [style]="{ width: '100%' }"
+            [invalid]="temErro('faixaEtaria')" />
+          <small *ngIf="temErro('faixaEtaria')" class="erro">Faixa etária é obrigatória</small>
+        </div>
+
+        <div class="form-field">
+          <label>Porte *</label>
+          <p-select formControlName="porte" [options]="portes" optionLabel="label"
+            placeholder="Selecione" [style]="{ width: '100%' }"
+            [invalid]="temErro('porte')" />
+          <small *ngIf="temErro('porte')" class="erro">Porte é obrigatório</small>
+        </div>
+
+        <div class="form-field">
+          <label>Cor</label>
+          <input pInputText formControlName="cor" placeholder="Ex: amarelo" style="width: 100%" />
+        </div>
+      </div>
+
+      <p-divider align="left"><span class="section-label">Localização e Status</span></p-divider>
+
+      <div class="form-row">
+        <div class="form-field form-field--grow">
+          <label>Cidade *</label>
+          <input pInputText formControlName="cidade" placeholder="Ex: Florianópolis" style="width: 100%"
+            [class.ng-invalid]="temErro('cidade')" [class.ng-dirty]="temErro('cidade')" />
+          <small *ngIf="temErro('cidade')" class="erro">Cidade é obrigatória</small>
+        </div>
+
+        <div class="form-field form-field--uf">
+          <label>UF *</label>
+          <input pInputText formControlName="estado" placeholder="SC" maxlength="2" style="width: 100%; text-transform: uppercase"
+            [class.ng-invalid]="temErro('estado')" [class.ng-dirty]="temErro('estado')" />
+          <small *ngIf="temErro('estado')" class="erro">Obrigatório</small>
+        </div>
+
+        <div class="form-field">
+          <label>Status</label>
+          <p-select formControlName="status" [options]="statusOpcoes" optionLabel="label"
+            [style]="{ width: '100%' }" />
+        </div>
+      </div>
+
+      <p-divider align="left"><span class="section-label">Saúde e Informações Adicionais</span></p-divider>
+
+      <div class="form-row form-row--checks">
+        <div class="check-field">
+          <p-checkbox formControlName="castrado" [binary]="true" inputId="castrado" />
+          <label for="castrado">Castrado</label>
+        </div>
+        <div class="check-field">
+          <p-checkbox formControlName="vacinado" [binary]="true" inputId="vacinado" />
+          <label for="vacinado">Vacinado</label>
+        </div>
+      </div>
+
+      <div class="form-field" style="margin-top: 1rem">
+        <label>URL da Foto</label>
+        <input pInputText formControlName="foto" placeholder="https://..." style="width: 100%" />
+      </div>
+
+      <div class="form-field" style="margin-top: 1rem">
+        <label>Características</label>
+        <textarea pTextarea formControlName="caracteristicas" rows="4"
+          placeholder="Descreva o temperamento e outras características do animal"
+          style="width: 100%; resize: vertical"></textarea>
+      </div>
+
+      <p-divider />
+
+      <div class="form-actions">
+        <p-button label="Cancelar" icon="pi pi-times" severity="secondary" [outlined]="true"
+          type="button" (onClick)="cancelar()" />
+        <p-button [label]="editando ? 'Atualizar' : 'Cadastrar'" icon="pi pi-check"
+          type="submit" [loading]="salvando()" />
+      </div>
+
+    </form>
+  </p-card>
+</div>
+
+<style>
+  .page-wrapper { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+  .card-header { font-size: 1.2rem; font-weight: 600; }
+  .section-label { font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+  .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .form-field { display: flex; flex-direction: column; flex: 1; min-width: 160px; gap: 0.3rem; }
+  .form-field--grow { flex: 2; }
+  .form-field--uf { flex: 0 0 80px; min-width: 80px; }
+  .form-row--checks { align-items: center; gap: 2rem; margin: 0.5rem 0; }
+  .check-field { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+  .check-field label { cursor: pointer; font-size: 0.95rem; }
+  label { font-size: 0.85rem; font-weight: 600; color: #475569; }
+  .erro { color: #ef4444; font-size: 0.78rem; }
+  .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
+</style>

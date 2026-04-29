@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ng version *)",
+      "Bash(ng build *)",
+      "Bash(mvn compile *)",
+      "PowerShell(java *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(mvn compile *)",
+      "PowerShell(Get-Command *)",
+      "Bash(npm show *)",
+      "Bash(npm install *)",
+      "PowerShell(Remove-Item *)"
+    ]
+  }
+}
