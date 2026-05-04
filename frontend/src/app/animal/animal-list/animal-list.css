@@ -1,0 +1,12 @@
+.page-wrapper    { max-width: 1400px; margin: 2rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.page-header     { display: flex; align-items: center; justify-content: space-between; }
+.page-title      { font-size: 1.5rem; font-weight: 700; color: #1e293b; margin: 0; }
+.card-title      { display: flex; align-items: center; gap: 0.5rem; font-size: 1rem; font-weight: 600; color: #334155; }
+.card-title i    { color: #6366f1; }
+.filtros-campos  { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.filtros-rodape  { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; }
+.acoes           { display: flex; gap: 0.25rem; justify-content: center; }
+.empty-state     { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; padding: 2.5rem 1rem; color: #64748b; }
+.empty-state-icon  { font-size: 2.5rem; color: #cbd5e1; }
+.empty-state-title { font-size: 1rem; font-weight: 600; color: #475569; }
+.empty-state-sub   { font-size: 0.875rem; }

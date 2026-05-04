@@ -2,79 +2,166 @@
   <p-toast />
   <p-confirmDialog />
 
-  <p-toolbar styleClass="toolbar-custom">
-    <ng-template #start>
-      <h2 class="page-title">Animais para Adoção</h2>
-    </ng-template>
-    <ng-template #end>
-      <p-button label="Novo Animal" icon="pi pi-plus" (onClick)="novo()" />
-    </ng-template>
-  </p-toolbar>
-
-  <div class="table-wrapper">
-    <p-table
-      [value]="animais()"
-      [paginator]="true"
-      [rows]="10"
-      [rowsPerPageOptions]="[5, 10, 25]"
-      [tableStyle]="{ 'min-width': '60rem' }"
-      stripedRows
-      showGridlines
-      emptyMessage="Nenhum animal cadastrado.">
-
-      <ng-template #header>
-        <tr>
-          <th>ID</th>
-          <th>Espécie</th>
-          <th>Raça</th>
-          <th>Sexo</th>
-          <th>Faixa Etária</th>
-          <th>Porte</th>
-          <th>Cidade / UF</th>
-          <th>Castrado</th>
-          <th>Vacinado</th>
-          <th>Status</th>
-          <th style="width: 130px">Ações</th>
-        </tr>
-      </ng-template>
-
-      <ng-template #body let-animal>
-        <tr>
-          <td>{{ animal.id }}</td>
-          <td>{{ animal.especie }}</td>
-          <td>{{ animal.raca || '—' }}</td>
-          <td>{{ animal.sexo }}</td>
-          <td>{{ animal.faixaEtaria }}</td>
-          <td>{{ animal.porte }}</td>
-          <td>{{ animal.cidade }} / {{ animal.estado }}</td>
-          <td>
-            <i class="pi" [class.pi-check-circle]="animal.castrado" [class.pi-times-circle]="!animal.castrado"
-               [style.color]="animal.castrado ? '#22c55e' : '#ef4444'"></i>
-          </td>
-          <td>
-            <i class="pi" [class.pi-check-circle]="animal.vacinado" [class.pi-times-circle]="!animal.vacinado"
-               [style.color]="animal.vacinado ? '#22c55e' : '#ef4444'"></i>
-          </td>
-          <td>
-            <p-tag [value]="labelStatus(animal.status)" [severity]="severityStatus(animal.status)" />
-          </td>
-          <td>
-            <div class="acoes">
-              <p-button icon="pi pi-pencil" size="small" severity="info" (onClick)="editar(animal)" pTooltip="Editar" />
-              <p-button icon="pi pi-trash" size="small" severity="danger" (onClick)="confirmarExclusao(animal)" pTooltip="Excluir" />
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-
-    </p-table>
+  <div class="page-header">
+    <h2 class="page-title">Animais para Adoção</h2>
+    <p-button label="Novo Animal" icon="pi pi-plus" (onClick)="novo()" />
   </div>
-</div>
 
-<style>
-  .page-wrapper { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-  .page-title { font-size: 1.3rem; font-weight: 600; color: #1e293b; margin: 0; }
-  .toolbar-custom { margin-bottom: 1rem; border-radius: 8px; }
-  .table-wrapper { border-radius: 8px; overflow: hidden; }
-  .acoes { display: flex; gap: 0.25rem; justify-content: center; }
-</style>
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-filter"></i>
+        <span>Filtros</span>
+      </div>
+    </ng-template>
+
+    <div class="filtros-campos">
+      <p-select
+        [(ngModel)]="filtroEspecie"
+        [options]="especies"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Espécie"
+        [showClear]="true"
+        [style]="{'width':'150px'}" />
+
+      <p-select
+        [(ngModel)]="filtroSexo"
+        [options]="sexos"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Sexo"
+        [showClear]="true"
+        [style]="{'width':'140px'}" />
+
+      <p-select
+        [(ngModel)]="filtroFaixaEtaria"
+        [options]="faixasEtarias"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Faixa Etária"
+        [showClear]="true"
+        [style]="{'width':'160px'}" />
+
+      <p-select
+        [(ngModel)]="filtroPorte"
+        [options]="portes"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Porte"
+        [showClear]="true"
+        [style]="{'width':'150px'}" />
+
+      <input
+        pInputText
+        [(ngModel)]="filtroCidade"
+        placeholder="Cidade"
+        style="width: 160px" />
+
+      <p-select
+        [(ngModel)]="filtroStatus"
+        [options]="statusOpcoes"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Status"
+        [showClear]="true"
+        [style]="{'width':'155px'}" />
+    </div>
+
+    <div class="filtros-rodape">
+      <p-button
+        label="Limpar filtros"
+        icon="pi pi-times"
+        [text]="true"
+        severity="secondary"
+        (onClick)="limparFiltros()" />
+      <p-button
+        label="Filtrar"
+        icon="pi pi-search"
+        (onClick)="filtrar()" />
+    </div>
+  </p-card>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-list"></i>
+        <span>Animais Cadastrados</span>
+      </div>
+    </ng-template>
+
+    @if (animais().length === 0) {
+      <div class="empty-state">
+        @if (temFiltroAtivo) {
+          <i class="pi pi-filter-slash empty-state-icon"></i>
+          <span class="empty-state-title">Nenhum animal encontrado com os filtros aplicados.</span>
+          <p-button label="Limpar filtros" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="limparFiltros()" />
+        } @else {
+          <i class="pi pi-inbox empty-state-icon"></i>
+          <span class="empty-state-title">Nenhum animal cadastrado.</span>
+          <span class="empty-state-sub">Clique em "Novo Animal" para adicionar o primeiro.</span>
+          <p-button label="Novo Animal" icon="pi pi-plus" (onClick)="novo()" />
+        }
+      </div>
+    } @else {
+      <p-table
+        [value]="animais()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 25]"
+        [tableStyle]="{ 'min-width': '56rem' }"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} animais"
+        stripedRows
+        showGridlines>
+
+        <ng-template #header>
+          <tr>
+            <th style="width: 60px; text-align: center">#</th>
+            <th pSortableColumn="especie">Espécie <p-sortIcon field="especie" /></th>
+            <th>Raça</th>
+            <th pSortableColumn="sexo">Sexo <p-sortIcon field="sexo" /></th>
+            <th pSortableColumn="faixaEtaria">Faixa Etária <p-sortIcon field="faixaEtaria" /></th>
+            <th pSortableColumn="porte">Porte <p-sortIcon field="porte" /></th>
+            <th pSortableColumn="cidade">Cidade / UF <p-sortIcon field="cidade" /></th>
+            <th style="width: 90px; text-align: center">Castrado</th>
+            <th style="width: 90px; text-align: center">Vacinado</th>
+            <th pSortableColumn="status" style="width: 130px; text-align: center">Status <p-sortIcon field="status" /></th>
+            <th style="width: 100px; text-align: center">Ações</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-animal>
+          <tr>
+            <td style="text-align: center; color: #94a3b8; font-size: 0.85rem">{{ animal.id }}</td>
+            <td>{{ labelEspecie(animal.especie) }}</td>
+            <td>{{ animal.raca || '—' }}</td>
+            <td>{{ labelSexo(animal.sexo) }}</td>
+            <td>{{ labelFaixaEtaria(animal.faixaEtaria) }}</td>
+            <td>{{ labelPorte(animal.porte) }}</td>
+            <td>{{ animal.cidade }} / {{ animal.estado }}</td>
+            <td style="text-align: center">
+              <i class="pi" [class.pi-check-circle]="animal.castrado" [class.pi-times-circle]="!animal.castrado"
+                 [style.color]="animal.castrado ? '#22c55e' : '#ef4444'"></i>
+            </td>
+            <td style="text-align: center">
+              <i class="pi" [class.pi-check-circle]="animal.vacinado" [class.pi-times-circle]="!animal.vacinado"
+                 [style.color]="animal.vacinado ? '#22c55e' : '#ef4444'"></i>
+            </td>
+            <td style="text-align: center">
+              <p-tag [value]="labelStatus(animal.status)" [severity]="severityStatus(animal.status)" />
+            </td>
+            <td style="text-align: center">
+              <div class="acoes">
+                <p-button icon="pi pi-pencil" size="small" severity="info" (onClick)="editar(animal)" pTooltip="Editar" tooltipPosition="top" />
+                <p-button icon="pi pi-trash" size="small" severity="danger" (onClick)="confirmarExclusao(animal)" pTooltip="Excluir" tooltipPosition="top" />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    }
+  </p-card>
+
+</div>

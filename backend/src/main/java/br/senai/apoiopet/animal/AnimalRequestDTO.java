@@ -2,16 +2,13 @@ package br.senai.apoiopet.animal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class AnimalDTO {
-
-    private Long id;
+public class AnimalRequestDTO {
 
     @NotNull(message = "Espécie é obrigatória")
     private Especie especie;
@@ -39,6 +36,7 @@ public class AnimalDTO {
     private String cidade;
 
     @NotBlank(message = "Estado é obrigatório")
+    @Size(max = 2, message = "Estado deve ter no máximo 2 caracteres")
     private String estado;
 
     @NotNull(message = "Castrado é obrigatório")
@@ -46,6 +44,4 @@ public class AnimalDTO {
 
     @NotNull(message = "Vacinado é obrigatório")
     private Boolean vacinado;
-
-    private LocalDateTime criadoEm;
 }

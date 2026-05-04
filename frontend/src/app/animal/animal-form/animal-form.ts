@@ -41,29 +41,29 @@ export class AnimalForm implements OnInit {
   salvando = signal(false);
 
   readonly especies = [
-    { label: 'Cão', value: 'cao' },
-    { label: 'Gato', value: 'gato' }
+    { label: 'Cão', value: 'CAO' },
+    { label: 'Gato', value: 'GATO' }
   ];
   readonly sexos = [
-    { label: 'Macho', value: 'macho' },
-    { label: 'Fêmea', value: 'femea' }
+    { label: 'Macho', value: 'MACHO' },
+    { label: 'Fêmea', value: 'FEMEA' }
   ];
   readonly faixasEtarias = [
-    { label: 'Filhote', value: 'filhote' },
-    { label: 'Jovem', value: 'jovem' },
-    { label: 'Adulto', value: 'adulto' },
-    { label: 'Sênior', value: 'senior' }
+    { label: 'Filhote', value: 'FILHOTE' },
+    { label: 'Jovem', value: 'JOVEM' },
+    { label: 'Adulto', value: 'ADULTO' },
+    { label: 'Sênior', value: 'SENIOR' }
   ];
   readonly portes = [
-    { label: 'Pequeno', value: 'pequeno' },
-    { label: 'Médio', value: 'medio' },
-    { label: 'Grande', value: 'grande' }
+    { label: 'Pequeno', value: 'PEQUENO' },
+    { label: 'Médio', value: 'MEDIO' },
+    { label: 'Grande', value: 'GRANDE' }
   ];
   readonly statusOpcoes = [
-    { label: 'Disponível', value: 'disponivel' },
-    { label: 'Em Processo', value: 'em_processo' },
-    { label: 'Adotado', value: 'adotado' },
-    { label: 'Indisponível', value: 'indisponivel' }
+    { label: 'Disponível', value: 'DISPONIVEL' },
+    { label: 'Em Processo', value: 'EM_PROCESSO' },
+    { label: 'Adotado', value: 'ADOTADO' },
+    { label: 'Indisponível', value: 'INDISPONIVEL' }
   ];
 
   constructor(
@@ -83,7 +83,7 @@ export class AnimalForm implements OnInit {
       porte:           [null, Validators.required],
       cor:             [''],
       caracteristicas: [''],
-      status:          [{ label: 'Disponível', value: 'disponivel' }, Validators.required],
+      status:          [{ label: 'Disponível', value: 'DISPONIVEL' }, Validators.required],
       foto:            [''],
       cidade:          ['', Validators.required],
       estado:          ['', [Validators.required, Validators.maxLength(2)]],

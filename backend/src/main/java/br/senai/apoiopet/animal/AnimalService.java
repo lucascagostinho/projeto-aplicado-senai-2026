@@ -1,10 +1,13 @@
 package br.senai.apoiopet.animal;
 
+import br.senai.apoiopet.exception.AnimalNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class AnimalService {
 
     private final AnimalRepository repository;
@@ -13,19 +16,21 @@ public class AnimalService {
         this.repository = repository;
     }
 
-    public List<Animal> listarTodos() {
-        return repository.findAll();
+    public List<Animal> listarComFiltro(AnimalFiltroDTO filtro) {
+        return repository.findAll(AnimalSpec.build(filtro));
     }
 
     public Animal buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Animal não encontrado com id: " + id));
+                .orElseThrow(() -> new AnimalNotFoundException(id));
     }
 
+    @Transactional
     public Animal salvar(Animal animal) {
         return repository.save(animal);
     }
 
+    @Transactional
     public Animal atualizar(Long id, Animal dados) {
         Animal animal = buscarPorId(id);
         animal.setEspecie(dados.getEspecie());
@@ -44,6 +49,7 @@ public class AnimalService {
         return repository.save(animal);
     }
 
+    @Transactional
     public void deletar(Long id) {
         buscarPorId(id);
         repository.deleteById(id);

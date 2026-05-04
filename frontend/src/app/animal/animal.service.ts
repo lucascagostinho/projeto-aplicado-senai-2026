@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Animal } from './animal.model';
+import { Animal, AnimalFiltro } from './animal.model';
 
 @Injectable({ providedIn: 'root' })
 export class AnimalService {
@@ -10,8 +10,17 @@ export class AnimalService {
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<Animal[]> {
-    return this.http.get<Animal[]>(this.apiUrl);
+  listar(filtro?: AnimalFiltro): Observable<Animal[]> {
+    let params = new HttpParams();
+    if (filtro) {
+      if (filtro.especie)        params = params.set('especie',     filtro.especie);
+      if (filtro.porte)          params = params.set('porte',       filtro.porte);
+      if (filtro.faixaEtaria)    params = params.set('faixaEtaria', filtro.faixaEtaria);
+      if (filtro.sexo)           params = params.set('sexo',        filtro.sexo);
+      if (filtro.cidade?.trim()) params = params.set('cidade',      filtro.cidade!.trim());
+      if (filtro.status)         params = params.set('status',      filtro.status);
+    }
+    return this.http.get<Animal[]>(this.apiUrl, { params });
   }
 
   buscarPorId(id: number): Observable<Animal> {

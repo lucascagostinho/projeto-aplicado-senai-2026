@@ -16,32 +16,24 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String especie;
+    private Especie especie;
 
     @Column(length = 100)
     private String raca;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private String sexo;
+    private Sexo sexo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "faixa_etaria", nullable = false, length = 15)
-    private String faixaEtaria;
+    private FaixaEtaria faixaEtaria;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private String porte;
-
-    @Column(length = 50)
-    private String cor;
-
-    @Column(columnDefinition = "TEXT")
-    private String caracteristicas;
-
-    @Column(nullable = false, length = 20)
-    private String status;
-
-    @Column(length = 255)
-    private String foto;
+    private Porte porte;
 
     @Column(nullable = false, length = 100)
     private String cidade;
@@ -55,6 +47,19 @@ public class Animal {
     @Column(nullable = false)
     private Boolean vacinado;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private AnimalStatus status;
+
+    @Column(length = 50)
+    private String cor;
+
+    @Column(length = 255)
+    private String foto;
+
+    @Column(columnDefinition = "TEXT")
+    private String caracteristicas;
+
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
@@ -62,7 +67,7 @@ public class Animal {
     protected void onCreate() {
         criadoEm = LocalDateTime.now();
         if (status == null) {
-            status = "disponivel";
+            status = AnimalStatus.DISPONIVEL;
         }
     }
 }
