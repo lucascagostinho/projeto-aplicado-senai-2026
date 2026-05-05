@@ -1,0 +1,7 @@
+# Arquivos internos do projeto
+plano-implementacao.md
+analise.md
+*.pdf
+
+# Claude Code
+.claude/
