@@ -13,6 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { AnimalService } from '../animal.service';
+import { ESPECIES, SEXOS, FAIXAS_ETARIAS, PORTES, STATUS_OPCOES } from '../animal-options';
 
 @Component({
   selector: 'app-animal-form',
@@ -31,7 +32,8 @@ import { AnimalService } from '../animal.service';
     DividerModule
   ],
   providers: [MessageService],
-  templateUrl: './animal-form.html'
+  templateUrl: './animal-form.html',
+  styleUrl: './animal-form.css'
 })
 export class AnimalForm implements OnInit {
 
@@ -40,31 +42,11 @@ export class AnimalForm implements OnInit {
   animalId?: number;
   salvando = signal(false);
 
-  readonly especies = [
-    { label: 'Cão', value: 'CAO' },
-    { label: 'Gato', value: 'GATO' }
-  ];
-  readonly sexos = [
-    { label: 'Macho', value: 'MACHO' },
-    { label: 'Fêmea', value: 'FEMEA' }
-  ];
-  readonly faixasEtarias = [
-    { label: 'Filhote', value: 'FILHOTE' },
-    { label: 'Jovem', value: 'JOVEM' },
-    { label: 'Adulto', value: 'ADULTO' },
-    { label: 'Sênior', value: 'SENIOR' }
-  ];
-  readonly portes = [
-    { label: 'Pequeno', value: 'PEQUENO' },
-    { label: 'Médio', value: 'MEDIO' },
-    { label: 'Grande', value: 'GRANDE' }
-  ];
-  readonly statusOpcoes = [
-    { label: 'Disponível', value: 'DISPONIVEL' },
-    { label: 'Em Processo', value: 'EM_PROCESSO' },
-    { label: 'Adotado', value: 'ADOTADO' },
-    { label: 'Indisponível', value: 'INDISPONIVEL' }
-  ];
+  readonly especies      = ESPECIES;
+  readonly sexos         = SEXOS;
+  readonly faixasEtarias = FAIXAS_ETARIAS;
+  readonly portes        = PORTES;
+  readonly statusOpcoes  = STATUS_OPCOES;
 
   constructor(
     private fb: FormBuilder,
@@ -83,7 +65,7 @@ export class AnimalForm implements OnInit {
       porte:           [null, Validators.required],
       cor:             [''],
       caracteristicas: [''],
-      status:          [{ label: 'Disponível', value: 'DISPONIVEL' }, Validators.required],
+      status:          ['DISPONIVEL', Validators.required],
       foto:            [''],
       cidade:          ['', Validators.required],
       estado:          ['', [Validators.required, Validators.maxLength(2)]],
@@ -96,16 +78,7 @@ export class AnimalForm implements OnInit {
       this.editando = true;
       this.animalId = +id;
       this.service.buscarPorId(this.animalId).subscribe({
-        next: (animal) => {
-          this.form.patchValue({
-            ...animal,
-            especie:     this.especies.find(e => e.value === animal.especie) ?? null,
-            sexo:        this.sexos.find(s => s.value === animal.sexo) ?? null,
-            faixaEtaria: this.faixasEtarias.find(f => f.value === animal.faixaEtaria) ?? null,
-            porte:       this.portes.find(p => p.value === animal.porte) ?? null,
-            status:      this.statusOpcoes.find(s => s.value === animal.status) ?? null
-          });
-        },
+        next: (animal) => this.form.patchValue(animal),
         error: () => this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Animal não encontrado.' })
       });
     }
@@ -117,17 +90,8 @@ export class AnimalForm implements OnInit {
       return;
     }
 
-    const raw = this.form.value;
-    const dados = {
-      ...raw,
-      especie:     raw.especie?.value ?? raw.especie,
-      sexo:        raw.sexo?.value ?? raw.sexo,
-      faixaEtaria: raw.faixaEtaria?.value ?? raw.faixaEtaria,
-      porte:       raw.porte?.value ?? raw.porte,
-      status:      raw.status?.value ?? raw.status
-    };
-
     this.salvando.set(true);
+    const dados = this.form.value;
 
     if (this.editando && this.animalId) {
       this.service.atualizar(this.animalId, dados).subscribe({

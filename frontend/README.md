@@ -1,59 +1,67 @@
-# Frontend
+# Frontend — Apoio Pet
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+SPA construída com Angular 21 e PrimeNG 21.
 
-## Development server
+## Pré-requisitos
 
-To start a local development server, run:
+| Ferramenta    | Versão mínima |
+|---------------|---------------|
+| Node.js       | 20            |
+| npm           | 10            |
+| Angular CLI   | 21            |
+
+### Instalar o Angular CLI globalmente (caso ainda não tenha)
+
+```bash
+npm install -g @angular/cli
+```
+
+## Instalação das dependências
+
+```bash
+cd frontend
+npm install
+```
+
+## Executar em desenvolvimento
+
+> O backend precisa estar rodando em `http://localhost:8080` antes de iniciar o frontend.
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+A aplicação estará disponível em: `http://localhost:4200`
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Build para produção
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Os arquivos gerados ficam em `dist/frontend/browser/`.
 
-## Running unit tests
+## Configuração da URL da API
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+A URL base da API está definida em:
 
-```bash
-ng test
+```
+src/app/animal/animal.service.ts
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
+```typescript
+private readonly apiUrl = 'http://localhost:8080/api/animais';
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Altere esse valor caso o backend esteja em outro host ou porta.
 
-## Additional Resources
+## Estrutura relevante
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```
+src/app/animal/
+├── animal.model.ts        # Interfaces e tipos TypeScript
+├── animal.service.ts      # Comunicação com a API
+├── animal-options.ts      # Listas de opções compartilhadas (espécie, porte, etc.)
+├── animal-list/           # Tela de listagem com filtros
+└── animal-form/           # Tela de cadastro e edição
+```

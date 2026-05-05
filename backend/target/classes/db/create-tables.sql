@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS animal (
     estado          VARCHAR(2)      NOT NULL,
     castrado        BOOLEAN         NOT NULL,
     vacinado        BOOLEAN         NOT NULL,
-    status          VARCHAR(20)     NOT NULL DEFAULT 'disponivel',
+    status          VARCHAR(20)     NOT NULL DEFAULT 'DISPONIVEL',
     cor             VARCHAR(50),
     foto            VARCHAR(255),
     caracteristicas TEXT,

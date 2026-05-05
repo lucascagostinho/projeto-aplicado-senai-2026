@@ -4,7 +4,6 @@
   <p-card>
     <ng-template #title>
       <div class="card-header">
-        <i class="pi pi-heart-fill" style="color: #ef4444; margin-right: 0.5rem;"></i>
         {{ editando ? 'Editar Animal' : 'Cadastrar Animal' }}
       </div>
     </ng-template>
@@ -16,7 +15,7 @@
       <div class="form-row">
         <div class="form-field">
           <label>Espécie *</label>
-          <p-select formControlName="especie" [options]="especies" optionLabel="label"
+          <p-select formControlName="especie" [options]="especies" optionLabel="label" optionValue="value"
             placeholder="Selecione" [style]="{ width: '100%' }"
             [invalid]="temErro('especie')" />
           <small *ngIf="temErro('especie')" class="erro">Espécie é obrigatória</small>
@@ -29,7 +28,7 @@
 
         <div class="form-field">
           <label>Sexo *</label>
-          <p-select formControlName="sexo" [options]="sexos" optionLabel="label"
+          <p-select formControlName="sexo" [options]="sexos" optionLabel="label" optionValue="value"
             placeholder="Selecione" [style]="{ width: '100%' }"
             [invalid]="temErro('sexo')" />
           <small *ngIf="temErro('sexo')" class="erro">Sexo é obrigatório</small>
@@ -39,7 +38,7 @@
       <div class="form-row">
         <div class="form-field">
           <label>Faixa Etária *</label>
-          <p-select formControlName="faixaEtaria" [options]="faixasEtarias" optionLabel="label"
+          <p-select formControlName="faixaEtaria" [options]="faixasEtarias" optionLabel="label" optionValue="value"
             placeholder="Selecione" [style]="{ width: '100%' }"
             [invalid]="temErro('faixaEtaria')" />
           <small *ngIf="temErro('faixaEtaria')" class="erro">Faixa etária é obrigatória</small>
@@ -47,7 +46,7 @@
 
         <div class="form-field">
           <label>Porte *</label>
-          <p-select formControlName="porte" [options]="portes" optionLabel="label"
+          <p-select formControlName="porte" [options]="portes" optionLabel="label" optionValue="value"
             placeholder="Selecione" [style]="{ width: '100%' }"
             [invalid]="temErro('porte')" />
           <small *ngIf="temErro('porte')" class="erro">Porte é obrigatório</small>
@@ -78,7 +77,7 @@
 
         <div class="form-field">
           <label>Status</label>
-          <p-select formControlName="status" [options]="statusOpcoes" optionLabel="label"
+          <p-select formControlName="status" [options]="statusOpcoes" optionLabel="label" optionValue="value"
             [style]="{ width: '100%' }" />
         </div>
       </div>
@@ -120,19 +119,3 @@
     </form>
   </p-card>
 </div>
-
-<style>
-  .page-wrapper { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-  .card-header { font-size: 1.2rem; font-weight: 600; }
-  .section-label { font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-  .form-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
-  .form-field { display: flex; flex-direction: column; flex: 1; min-width: 160px; gap: 0.3rem; }
-  .form-field--grow { flex: 2; }
-  .form-field--uf { flex: 0 0 80px; min-width: 80px; }
-  .form-row--checks { align-items: center; gap: 2rem; margin: 0.5rem 0; }
-  .check-field { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-  .check-field label { cursor: pointer; font-size: 0.95rem; }
-  label { font-size: 0.85rem; font-weight: 600; color: #475569; }
-  .erro { color: #ef4444; font-size: 0.78rem; }
-  .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
-</style>
