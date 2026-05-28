@@ -11,9 +11,15 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AnimalNotFoundException.class)
-    public ProblemDetail handleNotFound(AnimalNotFoundException ex) {
+    @ExceptionHandler({AnimalNotFoundException.class, UsuarioNotFoundException.class,
+            SolicitacaoNotFoundException.class, AdocaoNotFoundException.class})
+    public ProblemDetail handleNotFound(RuntimeException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(SolicitacaoStatusInvalidoException.class)
+    public ProblemDetail handleStatusInvalido(SolicitacaoStatusInvalidoException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

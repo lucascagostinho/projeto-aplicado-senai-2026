@@ -13,23 +13,17 @@ import { ToastModule } from 'primeng/toast';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { AnimalService } from '../animal.service';
+import { OngService } from '../../usuario/ong/ong.service';
+import { ProtetorService } from '../../usuario/protetor/protetor.service';
 import { ESPECIES, SEXOS, FAIXAS_ETARIAS, PORTES, STATUS_OPCOES } from '../animal-options';
 
 @Component({
   selector: 'app-animal-form',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    SelectModule,
-    CheckboxModule,
-    TextareaModule,
-    MessageModule,
-    ToastModule,
-    DividerModule
+    CommonModule, ReactiveFormsModule, CardModule, ButtonModule,
+    InputTextModule, SelectModule, CheckboxModule, TextareaModule,
+    MessageModule, ToastModule, DividerModule
   ],
   providers: [MessageService],
   templateUrl: './animal-form.html',
@@ -47,10 +41,13 @@ export class AnimalForm implements OnInit {
   readonly faixasEtarias = FAIXAS_ETARIAS;
   readonly portes        = PORTES;
   readonly statusOpcoes  = STATUS_OPCOES;
+  responsaveisOpcoes: { label: string; value: number | null }[] = [{ label: 'Sem responsável', value: null }];
 
   constructor(
     private fb: FormBuilder,
     private service: AnimalService,
+    private ongService: OngService,
+    private protetorService: ProtetorService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService
@@ -70,7 +67,20 @@ export class AnimalForm implements OnInit {
       cidade:          ['', Validators.required],
       estado:          ['', [Validators.required, Validators.maxLength(2)]],
       castrado:        [false],
-      vacinado:        [false]
+      vacinado:        [false],
+      responsavelId:   [null]
+    });
+
+    this.ongService.listar().subscribe({
+      next: (ongs) => {
+        const opcOng = ongs.map(o => ({ label: `[ONG] ${o.razaoSocial}`, value: o.id! }));
+        this.protetorService.listar().subscribe({
+          next: (protetores) => {
+            const opcPro = protetores.map(p => ({ label: `[Protetor] ${p.nome}`, value: p.id! }));
+            this.responsaveisOpcoes = [{ label: 'Sem responsável', value: null }, ...opcOng, ...opcPro];
+          }
+        });
+      }
     });
 
     const id = this.route.snapshot.paramMap.get('id');
@@ -85,36 +95,24 @@ export class AnimalForm implements OnInit {
   }
 
   salvar(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.salvando.set(true);
     const dados = this.form.value;
 
-    if (this.editando && this.animalId) {
-      this.service.atualizar(this.animalId, dados).subscribe({
-        next: () => this.router.navigate(['/animais']),
-        error: () => {
-          this.salvando.set(false);
-          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível atualizar o animal.' });
-        }
-      });
-    } else {
-      this.service.criar(dados).subscribe({
-        next: () => this.router.navigate(['/animais']),
-        error: () => {
-          this.salvando.set(false);
-          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível cadastrar o animal.' });
-        }
-      });
-    }
+    const req = (this.editando && this.animalId)
+      ? this.service.atualizar(this.animalId, dados)
+      : this.service.criar(dados);
+
+    req.subscribe({
+      next: () => this.router.navigate(['/animais']),
+      error: () => {
+        this.salvando.set(false);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível salvar o animal.' });
+      }
+    });
   }
 
-  cancelar(): void {
-    this.router.navigate(['/animais']);
-  }
+  cancelar(): void { this.router.navigate(['/animais']); }
 
   temErro(campo: string): boolean {
     const c = this.form.get(campo);

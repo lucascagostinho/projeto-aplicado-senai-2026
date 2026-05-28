@@ -1,0 +1,40 @@
+<div class="page-wrapper page-wrapper--narrow">
+  <p-toast />
+  <p-card>
+    <ng-template #header>
+      <div class="card-header">Nova Solicitação de Adoção</div>
+    </ng-template>
+    <form [formGroup]="form">
+      <div class="form-row">
+        <div class="form-field form-field--grow">
+          <label>Animal Disponível *</label>
+          <p-select formControlName="animalId" [options]="animaisOpcoes"
+                    optionLabel="label" optionValue="value"
+                    placeholder="Selecione o animal" [style]="{ width: '100%' }" />
+          <small class="erro" *ngIf="temErro('animalId')">Animal é obrigatório.</small>
+        </div>
+        <div class="form-field form-field--grow">
+          <label>Adotante *</label>
+          <p-select formControlName="adotanteId" [options]="adotantesOpcoes"
+                    optionLabel="label" optionValue="value"
+                    placeholder="Selecione o adotante" [style]="{ width: '100%' }" />
+          <small class="erro" *ngIf="temErro('adotanteId')">Adotante é obrigatório.</small>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field form-field--grow">
+          <label>Mensagem (opcional)</label>
+          <textarea pTextarea formControlName="mensagem" rows="4"
+                    placeholder="Mensagem do adotante ao responsável..."></textarea>
+        </div>
+      </div>
+    </form>
+    <ng-template #footer>
+      <div class="form-actions">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="cancelar()" />
+        <p-button label="Enviar Solicitação" icon="pi pi-send"
+                  [loading]="salvando()" (onClick)="salvar()" />
+      </div>
+    </ng-template>
+  </p-card>
+</div>

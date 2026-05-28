@@ -1,0 +1,97 @@
+<div class="page-wrapper">
+  <p-toast />
+  <p-confirmDialog />
+
+  <div class="page-header">
+    <h2 class="page-title">Adotantes</h2>
+    <p-button label="Novo Adotante" icon="pi pi-plus" (onClick)="novo()" />
+  </div>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-filter"></i>
+        <span>Filtros</span>
+      </div>
+    </ng-template>
+
+    <div class="filtros-campos">
+      <input pInputText [(ngModel)]="filtroNome"
+             placeholder="Nome" style="width: 220px" />
+      <input pInputText [(ngModel)]="filtroCpf"
+             placeholder="CPF" style="width: 180px" />
+      <input pInputText [(ngModel)]="filtroEmail"
+             placeholder="E-mail" style="width: 220px" />
+    </div>
+
+    <div class="filtros-rodape">
+      <p-button label="Limpar filtros" icon="pi pi-times" [text]="true"
+                severity="secondary" (onClick)="limparFiltros()" />
+      <p-button label="Filtrar" icon="pi pi-search" (onClick)="filtrar()" />
+    </div>
+  </p-card>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-user"></i>
+        <span>Adotantes Cadastrados</span>
+      </div>
+    </ng-template>
+
+    @if (adotantes().length === 0) {
+      <div class="empty-state">
+        @if (temFiltroAtivo) {
+          <i class="pi pi-filter-slash empty-icon"></i>
+          <span class="empty-title">Nenhum adotante encontrado com os filtros aplicados.</span>
+          <p-button label="Limpar filtros" icon="pi pi-times" severity="secondary"
+                    [outlined]="true" (onClick)="limparFiltros()" />
+        } @else {
+          <i class="pi pi-user empty-icon"></i>
+          <span class="empty-title">Nenhum adotante cadastrado</span>
+          <span class="empty-sub">Clique em "Novo Adotante" para adicionar o primeiro.</span>
+          <p-button label="Novo Adotante" icon="pi pi-plus" size="small" [outlined]="true" (onClick)="novo()" />
+        }
+      </div>
+    } @else {
+      <p-table
+        [value]="adotantes()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 25]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} adotantes"
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-hoverable-rows">
+
+        <ng-template #header>
+          <tr>
+            <th style="width: 60px; text-align: center">#</th>
+            <th pSortableColumn="nome">Nome <p-sortIcon field="nome" /></th>
+            <th>CPF</th>
+            <th pSortableColumn="email">E-mail <p-sortIcon field="email" /></th>
+            <th>Telefone</th>
+            <th style="width: 100px; text-align: center">Ações</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-a>
+          <tr>
+            <td style="text-align: center; color: #94a3b8; font-size: 0.85rem">{{ a.id }}</td>
+            <td>{{ a.nome }}</td>
+            <td>{{ a.cpf || '—' }}</td>
+            <td>{{ a.email }}</td>
+            <td>{{ a.telefone || '—' }}</td>
+            <td style="text-align: center">
+              <div class="acoes">
+                <p-button icon="pi pi-pencil" size="small" [outlined]="true" severity="secondary"
+                          (onClick)="editar(a)" pTooltip="Editar" tooltipPosition="top" />
+                <p-button icon="pi pi-trash" size="small" [outlined]="true" severity="danger"
+                          (onClick)="confirmarExclusao(a)" pTooltip="Excluir" tooltipPosition="top" />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+</div>

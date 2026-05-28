@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Animal, AnimalFiltro } from '../animal.model';
 import { AnimalService } from '../animal.service';
@@ -30,7 +31,8 @@ import { ESPECIES, SEXOS, FAIXAS_ETARIAS, PORTES, STATUS_OPCOES } from '../anima
     ToastModule,
     SelectModule,
     InputTextModule,
-    CardModule
+    CardModule,
+    TooltipModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './animal-list.html',

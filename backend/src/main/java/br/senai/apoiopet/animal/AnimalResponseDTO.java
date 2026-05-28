@@ -24,4 +24,7 @@ public class AnimalResponseDTO {
     private Boolean castrado;
     private Boolean vacinado;
     private LocalDateTime criadoEm;
+    private Long responsavelId;
+    private String responsavelNome;
+    private String responsavelTipo;
 }

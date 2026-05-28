@@ -1,4 +1,4 @@
-<div class="page-wrapper">
+<div class="page-wrapper page-wrapper--narrow">
   <p-toast />
 
   <p-card>
@@ -79,6 +79,15 @@
           <label>Status</label>
           <p-select formControlName="status" [options]="statusOpcoes" optionLabel="label" optionValue="value"
             [style]="{ width: '100%' }" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field form-field--grow">
+          <label>Responsável (ONG / Protetor)</label>
+          <p-select formControlName="responsavelId" [options]="responsaveisOpcoes"
+                    optionLabel="label" optionValue="value"
+                    placeholder="Sem responsável" [style]="{ width: '100%' }" />
         </div>
       </div>
 

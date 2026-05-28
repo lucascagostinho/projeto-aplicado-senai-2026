@@ -1,0 +1,97 @@
+<div class="page-wrapper">
+  <p-toast />
+  <p-confirmDialog />
+
+  <div class="page-header">
+    <h2 class="page-title">ONGs</h2>
+    <p-button label="Nova ONG" icon="pi pi-plus" (onClick)="nova()" />
+  </div>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-filter"></i>
+        <span>Filtros</span>
+      </div>
+    </ng-template>
+
+    <div class="filtros-campos">
+      <input pInputText [(ngModel)]="filtroRazaoSocial"
+             placeholder="Razão Social" style="width: 220px" />
+      <input pInputText [(ngModel)]="filtroCnpj"
+             placeholder="CNPJ" style="width: 180px" />
+      <input pInputText [(ngModel)]="filtroEmail"
+             placeholder="E-mail" style="width: 220px" />
+    </div>
+
+    <div class="filtros-rodape">
+      <p-button label="Limpar filtros" icon="pi pi-times" [text]="true"
+                severity="secondary" (onClick)="limparFiltros()" />
+      <p-button label="Filtrar" icon="pi pi-search" (onClick)="filtrar()" />
+    </div>
+  </p-card>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-building"></i>
+        <span>ONGs Cadastradas</span>
+      </div>
+    </ng-template>
+
+    @if (ongs().length === 0) {
+      <div class="empty-state">
+        @if (temFiltroAtivo) {
+          <i class="pi pi-filter-slash empty-icon"></i>
+          <span class="empty-title">Nenhuma ONG encontrada com os filtros aplicados.</span>
+          <p-button label="Limpar filtros" icon="pi pi-times" severity="secondary"
+                    [outlined]="true" (onClick)="limparFiltros()" />
+        } @else {
+          <i class="pi pi-building empty-icon"></i>
+          <span class="empty-title">Nenhuma ONG cadastrada</span>
+          <span class="empty-sub">Clique em "Nova ONG" para adicionar a primeira.</span>
+          <p-button label="Nova ONG" icon="pi pi-plus" size="small" [outlined]="true" (onClick)="nova()" />
+        }
+      </div>
+    } @else {
+      <p-table
+        [value]="ongs()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 25]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} ONGs"
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-hoverable-rows">
+
+        <ng-template #header>
+          <tr>
+            <th pSortableColumn="id" style="width: 60px; text-align: center"># <p-sortIcon field="id" /></th>
+            <th pSortableColumn="razaoSocial">Razão Social <p-sortIcon field="razaoSocial" /></th>
+            <th pSortableColumn="cnpj">CNPJ <p-sortIcon field="cnpj" /></th>
+            <th pSortableColumn="email">E-mail <p-sortIcon field="email" /></th>
+            <th>Telefone</th>
+            <th style="width: 100px; text-align: center">Ações</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-ong>
+          <tr>
+            <td style="text-align: center; color: #94a3b8; font-size: 0.85rem">{{ ong.id }}</td>
+            <td>{{ ong.razaoSocial }}</td>
+            <td>{{ ong.cnpj || '—' }}</td>
+            <td>{{ ong.email }}</td>
+            <td>{{ ong.telefone || '—' }}</td>
+            <td style="text-align: center">
+              <div class="acoes">
+                <p-button icon="pi pi-pencil" size="small" [outlined]="true" severity="secondary"
+                          (onClick)="editar(ong)" pTooltip="Editar" tooltipPosition="top" />
+                <p-button icon="pi pi-trash" size="small" [outlined]="true" severity="danger"
+                          (onClick)="confirmarExclusao(ong)" pTooltip="Excluir" tooltipPosition="top" />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+</div>

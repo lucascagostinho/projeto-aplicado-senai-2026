@@ -19,6 +19,9 @@ export interface Animal {
   estado: string;
   castrado: boolean;
   vacinado: boolean;
+  responsavelId?: number | null;
+  responsavelNome?: string;
+  responsavelTipo?: string;
   criadoEm?: string;
 }
 

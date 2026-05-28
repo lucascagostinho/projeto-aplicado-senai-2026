@@ -1,11 +1,104 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa;
-  color: #333;
+  background-color: #f1f5f9;
+  color: #334155;
+  min-height: 100vh;
 }
+
+.app-layout  { display: flex; min-height: 100vh; }
+.app-content { flex: 1; overflow: auto; min-width: 0; }
+
+/* ── Estrutura de página ─────────────────────────── */
+.page-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-wrapper--narrow { max-width: 840px; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* ── Card interno ────────────────────────────────── */
+.card-title   { display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; color: #334155; }
+.card-title i { color: #6366f1; }
+.filtros-campos { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+.filtros-rodape { display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #e2e8f0; }
+
+/* ── Tabelas ─────────────────────────────────────── */
+.acoes {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.table-search { margin-bottom: 0.25rem; }
+
+/* ── Empty state ─────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-icon  { font-size: 2.75rem; color: #cbd5e1; }
+.empty-title { font-size: 1rem; font-weight: 600; color: #475569; }
+.empty-sub   { font-size: 0.875rem; color: #94a3b8; }
+
+/* ── Formulários (globais) ───────────────────────── */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 180px;
+  gap: 0.35rem;
+}
+
+.form-field--grow { flex: 2; }
+.form-field--uf   { flex: 0 0 80px; min-width: 80px; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #64748b;
+}
+
+.erro { color: #ef4444; font-size: 0.78rem; }

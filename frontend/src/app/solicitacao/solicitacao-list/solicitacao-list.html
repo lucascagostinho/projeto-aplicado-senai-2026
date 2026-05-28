@@ -1,0 +1,126 @@
+<div class="page-wrapper">
+  <p-toast />
+
+  <div class="page-header">
+    <h2 class="page-title">Solicitações de Adoção</h2>
+    <p-button label="Nova Solicitação" icon="pi pi-plus" (onClick)="nova()" />
+  </div>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-filter"></i>
+        <span>Filtros</span>
+      </div>
+    </ng-template>
+
+    <div class="filtros-campos">
+      <p-select
+        [(ngModel)]="filtroStatus"
+        [options]="statusOpcoes"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Status"
+        [showClear]="true"
+        [style]="{'width': '180px'}" />
+    </div>
+
+    <div class="filtros-rodape">
+      <p-button label="Limpar filtros" icon="pi pi-times" [text]="true"
+                severity="secondary" (onClick)="limparFiltros()" />
+      <p-button label="Filtrar" icon="pi pi-search" (onClick)="filtrar()" />
+    </div>
+  </p-card>
+
+  <p-card styleClass="card-section">
+    <ng-template #title>
+      <div class="card-title">
+        <i class="pi pi-file-edit"></i>
+        <span>Solicitações Registradas</span>
+      </div>
+    </ng-template>
+
+    @if (solicitacoes().length === 0) {
+      <div class="empty-state">
+        @if (temFiltroAtivo) {
+          <i class="pi pi-filter-slash empty-icon"></i>
+          <span class="empty-title">Nenhuma solicitação encontrada com os filtros aplicados.</span>
+          <p-button label="Limpar filtros" icon="pi pi-times" severity="secondary"
+                    [outlined]="true" (onClick)="limparFiltros()" />
+        } @else {
+          <i class="pi pi-file-edit empty-icon"></i>
+          <span class="empty-title">Nenhuma solicitação registrada</span>
+          <span class="empty-sub">Clique em "Nova Solicitação" para registrar uma solicitação de adoção.</span>
+          <p-button label="Nova Solicitação" icon="pi pi-plus" size="small" [outlined]="true" (onClick)="nova()" />
+        }
+      </div>
+    } @else {
+      <p-table
+        [value]="solicitacoes()"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 25]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} solicitações"
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-hoverable-rows">
+
+        <ng-template #header>
+          <tr>
+            <th style="width: 60px; text-align: center">#</th>
+            <th>Animal</th>
+            <th>Adotante</th>
+            <th pSortableColumn="status" style="width: 130px; text-align: center">Status <p-sortIcon field="status" /></th>
+            <th pSortableColumn="criadoEm" style="width: 110px">Data <p-sortIcon field="criadoEm" /></th>
+            <th style="width: 130px; text-align: center">Ações</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-s>
+          <tr>
+            <td style="text-align: center; color: #94a3b8; font-size: 0.85rem">{{ s.id }}</td>
+            <td>
+              {{ s.animalEspecie === 'CAO' ? 'Cão' : 'Gato' }}
+              <span *ngIf="s.animalRaca"> — {{ s.animalRaca }}</span>
+              <small style="color: #94a3b8"> #{{ s.animalId }}</small>
+            </td>
+            <td>
+              {{ s.adotanteNome || '—' }}
+              <small style="color: #94a3b8"> #{{ s.adotanteId }}</small>
+            </td>
+            <td style="text-align: center">
+              <p-tag [value]="labelStatus(s.status)" [severity]="severidadeStatus(s.status)" />
+            </td>
+            <td style="color: #64748b; font-size: 0.85rem">{{ s.criadoEm | date:'dd/MM/yyyy' }}</td>
+            <td style="text-align: center">
+              <div class="acoes">
+                <p-button *ngIf="s.status === 'PENDENTE'"
+                          icon="pi pi-check" size="small" [outlined]="true" severity="success"
+                          (onClick)="aprovar(s.id)" pTooltip="Aprovar" tooltipPosition="top" />
+                <p-button *ngIf="s.status === 'PENDENTE'"
+                          icon="pi pi-times" size="small" [outlined]="true" severity="danger"
+                          (onClick)="abrirDialog(s.id, 'recusar')" pTooltip="Recusar" tooltipPosition="top" />
+                <p-button *ngIf="s.status === 'PENDENTE' || s.status === 'APROVADA'"
+                          icon="pi pi-ban" size="small" [outlined]="true" severity="secondary"
+                          (onClick)="abrirDialog(s.id, 'cancelar')" pTooltip="Cancelar" tooltipPosition="top" />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+
+  <p-dialog [(visible)]="dialogVisivel" [header]="dialogTitulo" [modal]="true" [style]="{ width: '420px' }">
+    <div class="dialog-body">
+      <label style="font-size: 0.82rem; font-weight: 600; color: #475569">Justificativa</label>
+      <textarea pTextarea [(ngModel)]="justificativa" rows="4"
+                placeholder="Informe o motivo..." style="width: 100%; margin-top: 0.35rem"></textarea>
+    </div>
+    <ng-template #footer>
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem">
+        <p-button label="Voltar" severity="secondary" [outlined]="true" (onClick)="dialogVisivel = false" />
+        <p-button label="Confirmar" icon="pi pi-check" (onClick)="confirmarAcao()" />
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

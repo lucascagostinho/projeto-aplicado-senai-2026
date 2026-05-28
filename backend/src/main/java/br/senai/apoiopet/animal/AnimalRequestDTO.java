@@ -44,4 +44,6 @@ public class AnimalRequestDTO {
 
     @NotNull(message = "Vacinado é obrigatório")
     private Boolean vacinado;
+
+    private Long responsavelId;
 }

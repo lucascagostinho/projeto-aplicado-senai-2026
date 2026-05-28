@@ -1,5 +1,6 @@
 package br.senai.apoiopet.animal;
 
+import br.senai.apoiopet.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,6 +60,10 @@ public class Animal {
 
     @Column(columnDefinition = "TEXT")
     private String caracteristicas;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "responsavel_id")
+    private Usuario responsavel;
 
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;

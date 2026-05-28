@@ -1,0 +1,53 @@
+<div class="page-wrapper page-wrapper--narrow">
+  <p-toast />
+  <p-card>
+    <ng-template #header>
+      <div class="card-header">{{ editando ? 'Editar Adotante' : 'Cadastrar Adotante' }}</div>
+    </ng-template>
+    <form [formGroup]="form">
+      <p class="section-label">Dados Pessoais</p>
+      <div class="form-row">
+        <div class="form-field form-field--grow">
+          <label>Nome *</label>
+          <input pInputText formControlName="nome" placeholder="Nome completo" />
+          <small class="erro" *ngIf="temErro('nome')">Nome é obrigatório.</small>
+        </div>
+        <div class="form-field">
+          <label>CPF</label>
+          <input pInputText formControlName="cpf" placeholder="000.000.000-00" />
+        </div>
+      </div>
+      <p-divider />
+      <p class="section-label">Acesso e Contato</p>
+      <div class="form-row">
+        <div class="form-field form-field--grow">
+          <label>E-mail *</label>
+          <input pInputText formControlName="email" placeholder="nome@email.com" />
+          <small class="erro" *ngIf="temErro('email')">E-mail válido é obrigatório.</small>
+        </div>
+        <div class="form-field">
+          <label>Senha *</label>
+          <input pInputText type="password" formControlName="senha" />
+          <small class="erro" *ngIf="temErro('senha')">Senha é obrigatória.</small>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Telefone</label>
+          <input pInputText formControlName="telefone" placeholder="(48) 99999-0000" />
+        </div>
+        <div class="form-field">
+          <label>CEP</label>
+          <input pInputText formControlName="cep" placeholder="88000-000" />
+        </div>
+      </div>
+    </form>
+    <ng-template #footer>
+      <div class="form-actions">
+        <p-button label="Cancelar" severity="secondary" [outlined]="true" (onClick)="cancelar()" />
+        <p-button [label]="editando ? 'Atualizar' : 'Cadastrar'" icon="pi pi-check"
+                  [loading]="salvando()" (onClick)="salvar()" />
+      </div>
+    </ng-template>
+  </p-card>
+</div>

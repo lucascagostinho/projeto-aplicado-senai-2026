@@ -93,14 +93,14 @@
     @if (animais().length === 0) {
       <div class="empty-state">
         @if (temFiltroAtivo) {
-          <i class="pi pi-filter-slash empty-state-icon"></i>
-          <span class="empty-state-title">Nenhum animal encontrado com os filtros aplicados.</span>
+          <i class="pi pi-filter-slash empty-icon"></i>
+          <span class="empty-title">Nenhum animal encontrado com os filtros aplicados.</span>
           <p-button label="Limpar filtros" icon="pi pi-times" severity="secondary" [outlined]="true" (onClick)="limparFiltros()" />
         } @else {
-          <i class="pi pi-inbox empty-state-icon"></i>
-          <span class="empty-state-title">Nenhum animal cadastrado.</span>
-          <span class="empty-state-sub">Clique em "Novo Animal" para adicionar o primeiro.</span>
-          <p-button label="Novo Animal" icon="pi pi-plus" (onClick)="novo()" />
+          <i class="pi pi-heart empty-icon"></i>
+          <span class="empty-title">Nenhum animal cadastrado</span>
+          <span class="empty-sub">Clique em "Novo Animal" para adicionar o primeiro.</span>
+          <p-button label="Novo Animal" icon="pi pi-plus" size="small" [outlined]="true" (onClick)="novo()" />
         }
       </div>
     } @else {
@@ -112,8 +112,7 @@
         [tableStyle]="{ 'min-width': '56rem' }"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} animais"
-        stripedRows
-        showGridlines>
+        styleClass="p-datatable-sm p-datatable-striped p-datatable-hoverable-rows">
 
         <ng-template #header>
           <tr>
@@ -127,6 +126,7 @@
             <th style="width: 90px; text-align: center">Castrado</th>
             <th style="width: 90px; text-align: center">Vacinado</th>
             <th pSortableColumn="status" style="width: 130px; text-align: center">Status <p-sortIcon field="status" /></th>
+            <th>Responsável</th>
             <th style="width: 100px; text-align: center">Ações</th>
           </tr>
         </ng-template>
@@ -151,10 +151,18 @@
             <td style="text-align: center">
               <p-tag [value]="labelStatus(animal.status)" [severity]="severityStatus(animal.status)" />
             </td>
+            <td>
+              @if (animal.responsavelNome) {
+                <span style="font-size: 0.82rem; color: #64748b">[{{ animal.responsavelTipo }}]</span>
+                {{ animal.responsavelNome }}
+              } @else {
+                <span style="color: #94a3b8">—</span>
+              }
+            </td>
             <td style="text-align: center">
               <div class="acoes">
-                <p-button icon="pi pi-pencil" size="small" severity="info" (onClick)="editar(animal)" pTooltip="Editar" tooltipPosition="top" />
-                <p-button icon="pi pi-trash" size="small" severity="danger" (onClick)="confirmarExclusao(animal)" pTooltip="Excluir" tooltipPosition="top" />
+                <p-button icon="pi pi-pencil" size="small" [outlined]="true" severity="secondary" (onClick)="editar(animal)" pTooltip="Editar" tooltipPosition="top" />
+                <p-button icon="pi pi-trash" size="small" [outlined]="true" severity="danger" (onClick)="confirmarExclusao(animal)" pTooltip="Excluir" tooltipPosition="top" />
               </div>
             </td>
           </tr>

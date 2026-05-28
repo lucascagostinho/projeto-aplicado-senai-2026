@@ -33,14 +33,14 @@ public class AnimalController {
 
     @PostMapping
     public ResponseEntity<AnimalResponseDTO> criar(@Valid @RequestBody AnimalRequestDTO dto) {
-        Animal salvo = service.salvar(mapper.toEntity(dto));
+        Animal salvo = service.salvar(mapper.toEntity(dto), dto.getResponsavelId());
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(salvo));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AnimalResponseDTO> atualizar(@PathVariable Long id,
                                                        @Valid @RequestBody AnimalRequestDTO dto) {
-        Animal atualizado = service.atualizar(id, mapper.toEntity(dto));
+        Animal atualizado = service.atualizar(id, mapper.toEntity(dto), dto.getResponsavelId());
         return ResponseEntity.ok(mapper.toResponse(atualizado));
     }
 

@@ -1,10 +1,17 @@
 # Apoio Pet
 
-Sistema de gerenciamento de adoção de animais desenvolvido como Projeto Aplicado II — Equipe 6 — SENAI SC.
+Sistema web de gerenciamento de adoção de animais desenvolvido como Projeto Aplicado II — Equipe 6 — SENAI SC.
 
-## Visão geral
+## O que o sistema faz
 
-O Apoio Pet permite cadastrar, listar, editar e excluir animais disponíveis para adoção. A listagem conta com filtros por espécie, sexo, faixa etária, porte, cidade e status, além de paginação e ordenação por coluna.
+O Apoio Pet organiza o ciclo completo de adoção de animais:
+
+- **Animais** — cadastro de cães e gatos disponíveis para adoção, com espécie, raça, porte, faixa etária, cidade e status
+- **ONGs** — organizações responsáveis pelos animais
+- **Protetores** — pessoas físicas que cuidam de animais
+- **Adotantes** — pessoas interessadas em adotar
+- **Solicitações de adoção** — pedidos de adoção com fluxo de aprovação/recusa/cancelamento
+- **Adoções confirmadas** — registro da entrega física do animal ao adotante
 
 ## Estrutura do repositório
 
@@ -16,24 +23,54 @@ projeto-aplicado-senai-2026/
 
 ## Stack
 
-| Camada     | Tecnologia                          |
-|------------|-------------------------------------|
-| Backend    | Java 21, Spring Boot 3.3.5, Maven   |
-| Banco      | PostgreSQL 15+                      |
-| Frontend   | Angular 21, PrimeNG 21, TypeScript  |
+| Camada   | Tecnologia                                    |
+|----------|-----------------------------------------------|
+| Backend  | Java 21, Spring Boot 3.3.5, Maven, Lombok     |
+| Banco    | PostgreSQL 15+                                |
+| Frontend | Angular 21, PrimeNG 21.1, TypeScript 5.9      |
 
 ## Pré-requisitos globais
 
-- Java 21+
-- Maven 3.9+
-- Node.js 20+ e npm 10+
-- PostgreSQL 15+
-- Angular CLI 21 (`npm install -g @angular/cli`)
+| Ferramenta    | Versão mínima | Para quê                  |
+|---------------|---------------|---------------------------|
+| Java          | 21            | Executar o backend        |
+| Maven         | 3.9           | Build e dependências Java |
+| PostgreSQL    | 15            | Banco de dados            |
+| Node.js       | 20            | Executar o frontend       |
+| npm           | 10            | Dependências JavaScript   |
 
 ## Ordem de inicialização
 
-1. Subir o banco de dados PostgreSQL
-2. Iniciar o backend (`backend/`)
-3. Iniciar o frontend (`frontend/`)
+Os serviços **devem** ser iniciados nesta ordem:
 
-Consulte o `README.md` de cada subdiretório para instruções detalhadas.
+```
+1. PostgreSQL  →  2. Backend (porta 8080)  →  3. Frontend (porta 4200)
+```
+
+O frontend consome a API do backend — iniciar na ordem errada causará erros de rede.
+
+## Início rápido
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/<seu-usuario>/projeto-aplicado-senai-2026.git
+cd projeto-aplicado-senai-2026
+
+# 2. Crie o banco de dados no PostgreSQL
+psql -U postgres -c "CREATE DATABASE apoio_pet;"
+
+# 3. Inicie o backend
+cd backend
+mvn spring-boot:run
+
+# 4. Em outro terminal, inicie o frontend
+cd frontend
+npm install
+ng serve
+```
+
+Acesse: **http://localhost:4200**
+
+---
+
+Consulte o `README.md` de cada subdiretório para configuração detalhada de cada serviço.
